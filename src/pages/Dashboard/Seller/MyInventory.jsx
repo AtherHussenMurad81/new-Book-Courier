@@ -1,6 +1,17 @@
+import { useQuery } from "@tanstack/react-query";
 import BookDataRow from "../../../components/Dashboard/TableRows/BookDataRow";
+import useAuth from "../../../hooks/useAuth";
+import axios from "axios";
 
 const MyInventory = () => {
+  const { user } = useAuth();
+  const { data: books = [], isLoading } = useQuery({
+    queryKey: ["inventory", user?.email],
+    queryFn: async () => {
+      const result = await axios(``)
+    },
+  });
+
   return (
     <>
       <div className="container mx-auto px-4 sm:px-8">

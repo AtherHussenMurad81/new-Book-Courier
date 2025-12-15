@@ -1,6 +1,7 @@
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
 import UpdatePlantModal from "../../Modal/UpdatePlantModal";
+import UpdateBookData from "../../Modal/UpdatePlantModal";
 
 const BookDataRow = () => {
   let [isOpen, setIsOpen] = useState(false);
@@ -65,10 +66,11 @@ const BookDataRow = () => {
           ></span>
           <span className="relative">Update</span>
         </span>
-        <UpdatePlantModal
+
+        <UpdateBookData
           isOpen={isEditModalOpen}
           setIsEditModalOpen={setIsEditModalOpen}
-        />
+        ></UpdateBookData>
       </td>
     </tr>
   );

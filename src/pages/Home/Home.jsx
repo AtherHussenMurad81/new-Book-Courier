@@ -1,11 +1,19 @@
-import Books from "../../components/Home/Books";
-// import Plants from "../../components/Home/Plants";
+import Banner from "./Banner";
+import Coverage from "./Coverage";
+import LatestBooks from "./LatestBooks";
+import Newsletter from "./Newsletter";
+import Testimonials from "./Testimonials";
+import WhyChoose from "./WhyChoose";
 
 const Home = () => {
   return (
     <div>
-      <Books></Books>
-      {/* More components */}
+      <Banner />
+      <LatestBooks />
+      <Coverage />
+      <WhyChoose />
+      <Testimonials />
+      <Newsletter />
     </div>
   );
 };

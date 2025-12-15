@@ -18,13 +18,19 @@ const Navbar = () => {
           <div className="flex flex-row  items-center justify-between gap-3 md:gap-0">
             {/* Logo */}
             <Link to="/">
-              <img
-                className="w-10 rounded-2xl"
-                src={logofile}
-                alt="logo"
-                width="100"
-                height="100"
-              />
+              <div className="flex">
+                <img
+                  className="w-13 rounded-xl"
+                  src={logofile}
+                  alt="logo"
+                  width="100"
+                  height="100"
+                />
+
+                <p className="text-2xl font-bold items-center ml-2 mt-2 justify-center">
+                  BookCourier
+                </p>
+              </div>
             </Link>
             {/* Dropdown Menu */}
             <div className="relative">
