@@ -1,80 +1,101 @@
-import Container from "../Container";
-import { AiOutlineMenu } from "react-icons/ai";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router";
+import { AiOutlineMenu, AiOutlineSun, AiOutlineMoon } from "react-icons/ai";
 import useAuth from "../../../hooks/useAuth";
+import Container from "../Container";
 import avatarImg from "../../../assets/images/placeholder.jpg";
-// import logo from "../../../assets/images/Logo";
-// import Logo from "../Logo/Logo";
 import logofile from "../../../assets/images/logo.png";
+
 const Navbar = () => {
   const { user, logOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  // Apply dark/light theme to html
+  useEffect(() => {
+    const html = document.querySelector("html");
+    html.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
 
   return (
-    <div className="fixed w-full bg-white z-10 shadow-sm">
-      <div className="py-4">
-        <Container>
-          <div className="flex flex-row  items-center justify-between gap-3 md:gap-0">
-            {/* Logo */}
-            <Link to="/">
-              <div className="flex">
-                <img
-                  className="w-13 rounded-xl"
-                  src={logofile}
-                  alt="logo"
-                  width="100"
-                  height="100"
-                />
+    <div className="fixed w-full z-50 shadow-md bg-white dark:bg-gray-900 transition-colors duration-300">
+      <Container>
+        <div className="flex justify-between items-center py-4">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <img src={logofile} alt="logo" className="w-14 h-14 rounded-xl" />
+            <span className="text-2xl font-bold text-gray-800 dark:text-white">
+              BookCourier
+            </span>
+          </Link>
 
-                <p className="text-2xl font-bold items-center ml-2 mt-2 justify-center">
-                  BookCourier
-                </p>
+          {/* Center - Dashboard link */}
+          <div className="hidden md:flex items-center gap-4">
+            {user && (
+              <Link
+                to="/dashboard"
+                className="btn btn-sm btn-primary text-white font-semibold"
+              >
+                Dashboard
+              </Link>
+            )}
+          </div>
+
+          {/* Right - Theme toggle + Dropdown */}
+          <div className="flex items-center gap-4 relative">
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              className="btn btn-ghost btn-sm rounded-full p-2"
+              title="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <AiOutlineSun className="text-yellow-400 w-5 h-5" />
+              ) : (
+                <AiOutlineMoon className="text-gray-700 w-5 h-5" />
+              )}
+            </button>
+
+            {/* Dropdown menu */}
+            <div>
+              <div
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center gap-2 p-2 border border-gray-300 dark:border-gray-700 rounded-full cursor-pointer hover:shadow-md transition"
+              >
+                <AiOutlineMenu className="w-5 h-5 text-gray-800 dark:text-white" />
+                <img
+                  src={user?.photoURL || avatarImg}
+                  alt="avatar"
+                  className="w-8 h-8 rounded-full"
+                  referrerPolicy="no-referrer"
+                />
               </div>
-            </Link>
-            {/* Dropdown Menu */}
-            <div className="relative">
-              <div className="flex flex-row items-center gap-3">
-                {/* Dropdown btn */}
-                <div
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="p-4 md:py-1 md:px-2 border border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
-                >
-                  <AiOutlineMenu />
-                  <div className="hidden md:block">
-                    {/* Avatar */}
-                    <img
-                      className="rounded-full"
-                      referrerPolicy="no-referrer"
-                      src={user && user.photoURL ? user.photoURL : avatarImg}
-                      alt="profile"
-                      height="30"
-                      width="30"
-                    />
-                  </div>
-                </div>
-              </div>
+
               {isOpen && (
-                <div className="absolute rounded-xl shadow-md w-[40vw] md:w-[10vw] bg-white overflow-hidden right-0 top-12 text-sm">
-                  <div className="flex flex-col cursor-pointer">
+                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden text-sm z-50">
+                  <div className="flex flex-col">
                     <Link
                       to="/"
-                      className="block md:hidden px-4 py-3 hover:bg-neutral-100 transition font-semibold"
+                      className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-semibold md:hidden"
                     >
                       Home
                     </Link>
-
                     {user ? (
                       <>
                         <Link
                           to="/dashboard"
-                          className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
+                          className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-semibold"
                         >
                           Dashboard
                         </Link>
                         <div
                           onClick={logOut}
-                          className="px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer"
+                          className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-semibold cursor-pointer"
                         >
                           Logout
                         </div>
@@ -83,13 +104,13 @@ const Navbar = () => {
                       <>
                         <Link
                           to="/login"
-                          className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
+                          className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-semibold"
                         >
                           Login
                         </Link>
                         <Link
                           to="/signup"
-                          className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
+                          className="px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition font-semibold"
                         >
                           Sign Up
                         </Link>
@@ -100,8 +121,18 @@ const Navbar = () => {
               )}
             </div>
           </div>
-        </Container>
-      </div>
+
+          {/* Mobile Dashboard link */}
+          {user && (
+            <Link
+              to="/dashboard"
+              className="btn btn-sm btn-primary text-white font-semibold md:hidden"
+            >
+              Dashboard
+            </Link>
+          )}
+        </div>
+      </Container>
     </div>
   );
 };

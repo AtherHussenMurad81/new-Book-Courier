@@ -16,6 +16,10 @@ import { createBrowserRouter } from "react-router";
 import BookDetails from "../pages/BookDetails/BookDetails";
 import PaymentSuccess from "../pages/Payment/PaymentSuccess";
 import Books from "../components/Home/Books";
+import Invoice from "../pages/Payment/Invoice";
+import MyBook from "../pages/MyBook";
+import EditBook from "../pages/EditBook";
+import AllUser from "../pages/Dashboard/Admin/AllUser";
 
 export const router = createBrowserRouter([
   {
@@ -102,6 +106,22 @@ export const router = createBrowserRouter([
       {
         path: "manage-orders",
         element: <ManageOrders />,
+      },
+      {
+        path: "invoice",
+        element: <Invoice />,
+      },
+      {
+        path: "my-book",
+        element: <MyBook />,
+      },
+      {
+        path: "edit-book/:id",
+        element: <EditBook />,
+      },
+      {
+        path: "all-user",
+        element: <AllUser />,
       },
     ],
   },

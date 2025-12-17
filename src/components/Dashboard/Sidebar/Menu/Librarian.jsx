@@ -5,7 +5,7 @@ const Librarian = () => {
   return (
     <>
       <MenuItem icon={BsFillHouseAddFill} label="Add Book" address="add-book" />
-      <MenuItem icon={MdHomeWork} label="My book" address="my-inventory" />
+      <MenuItem icon={MdHomeWork} label="My book" address="my-book" />
       <MenuItem
         icon={MdOutlineManageHistory}
         label="Manage Orders"
