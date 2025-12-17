@@ -1,90 +1,122 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const PurchaseModal = ({ closeModal, isOpen, book }) => {
-  // Total Price Calculation
-  // console.log("single book here", book);
   const { user } = useAuth();
-  const { author, name, price, status, image, user: seller, _id } = book || {};
-  console.log("seller", seller);
-  const handlePayment = async () => {
-    const paymentInfo = {
+  const { name, author, price, image, _id, category } = book || {};
+
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handlePlaceOrder = async () => {
+    if (!phone.trim() || !address.trim()) {
+      toast.error("Please fill in phone number and address.");
+      return;
+    }
+
+    setLoading(true);
+
+    const orderData = {
       bookId: _id,
-      name,
-      author,
-      image,
-      seller,
-      status,
       price,
-
-      customer: {
-        name: user?.displayName,
-        email: user?.email,
-        image: user?.photoURL,
-      },
+      customerName: user?.displayName,
+      customerPhone: phone,
+      customerAddress: address,
+      customerEmail: user?.email,
     };
+    // console.log(orderData);
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/orders`, orderData, {
+        headers: {
+          Authorization: `Bearer ${await user?.getIdToken()}`,
+        },
+      });
 
-    const { data } = await axios.post(
-      `${import.meta.env.VITE_API_URL}/create-checkout-session`,
-      paymentInfo
-    );
-    window.location.href = data.url;
+      toast.success("Order placed successfully! (Pending Payment)");
+      closeModal();
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to place order.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      as="div"
-      className="relative z-10 focus:outline-none "
-      onClose={closeModal}
-    >
-      <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-center justify-center p-4">
-          <DialogPanel
-            transition
-            className="w-full max-w-md bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-closed:transform-[scale(95%)] data-closed:opacity-0 shadow-xl rounded-2xl"
-          >
-            <DialogTitle
-              as="h3"
-              className="text-lg font-medium text-center leading-6 text-gray-900"
-            >
-              Review Info Before Purchase
-            </DialogTitle>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">Book Name: {name}</p>
-            </div>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">Author: {author}</p>
-            </div>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">User: {user.displayName}</p>
-            </div>
+    <Dialog open={isOpen} onClose={closeModal} className="relative z-50">
+      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+      <div className="fixed inset-0 flex items-center justify-center p-4">
+        <DialogPanel className="max-w-md w-full bg-white rounded-xl p-6 shadow-xl">
+          <DialogTitle className="text-xl font-bold text-center">
+            Complete Your Order
+          </DialogTitle>
 
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">Price: $ {price}</p>
+          <div className="mt-6 space-y-4">
+            <div>
+              <strong>Book:</strong> {name}
             </div>
-            <div className="mt-2">
-              {/* <p className="text-sm text-gray-500">Available Quantity: 5</p> */}
+            <div>
+              <strong>Author:</strong> {author}
             </div>
-            <div className="flex mt-2 justify-around">
-              <button
-                onClick={handlePayment}
-                type="button"
-                className="cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
-              >
-                Pay
-              </button>
-              <button
-                type="button"
-                className="cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                onClick={closeModal}
-              >
-                Cancel
-              </button>
+            <div>
+              <strong>Price:</strong> ${price}
             </div>
-          </DialogPanel>
-        </div>
+            <hr />
+
+            <input
+              type="text"
+              value={user?.displayName || ""}
+              readOnly
+              className="w-full p-2 border rounded bg-gray-100"
+              placeholder="Name"
+            />
+            <input
+              type="email"
+              value={user?.email || ""}
+              readOnly
+              className="w-full p-2 border rounded bg-gray-100"
+            />
+
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Phone Number *"
+              className="w-full p-2 border rounded"
+              required
+            />
+
+            <textarea
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Delivery Address *"
+              rows="3"
+              className="w-full p-2 border rounded"
+              required
+            />
+          </div>
+
+          <div className="mt-8 flex justify-end gap-3">
+            <button
+              onClick={closeModal}
+              disabled={loading}
+              className="px-4 py-2 border rounded"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handlePlaceOrder}
+              disabled={loading}
+              className="px-6 py-2 bg-blue-600 text-white rounded disabled:opacity-70"
+            >
+              {loading ? "Placing..." : "Place Order"}
+            </button>
+          </div>
+        </DialogPanel>
       </div>
     </Dialog>
   );

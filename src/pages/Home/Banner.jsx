@@ -46,7 +46,7 @@ const Banner = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[520px] overflow-hidden rounded-xl">
+    <div className="relative w-full h-[520px] overflow-hidden rounded-xl mt-20">
       {slides.map((slide, index) => (
         <div
           key={slide.id}
