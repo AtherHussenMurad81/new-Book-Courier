@@ -3,11 +3,12 @@ import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const PurchaseModal = ({ closeModal, isOpen, book }) => {
   const { user } = useAuth();
   const { name, author, price, image, _id, category } = book || {};
-
+  const axiosSecure = useAxiosSecure();
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,11 +31,15 @@ const PurchaseModal = ({ closeModal, isOpen, book }) => {
     };
     // console.log(orderData);
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/orders`, orderData, {
-        headers: {
-          Authorization: `Bearer ${await user?.getIdToken()}`,
-        },
-      });
+      await axiosSecure.post(
+        `${import.meta.env.VITE_API_URL}/orders`,
+        orderData,
+        {
+          headers: {
+            Authorization: `Bearer ${await user?.getIdToken()}`,
+          },
+        }
+      );
 
       toast.success("Order placed successfully! (Pending Payment)");
       closeModal();

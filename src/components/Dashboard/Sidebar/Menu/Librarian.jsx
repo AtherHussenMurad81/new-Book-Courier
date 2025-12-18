@@ -6,11 +6,11 @@ const Librarian = () => {
     <>
       <MenuItem icon={BsFillHouseAddFill} label="Add Book" address="add-book" />
       <MenuItem icon={MdHomeWork} label="My book" address="my-book" />
-      <MenuItem
+      {/* <MenuItem
         icon={MdOutlineManageHistory}
         label="Manage Orders"
         address="manage-orders"
-      />
+      /> */}
     </>
   );
 };

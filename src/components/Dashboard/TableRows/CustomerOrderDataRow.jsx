@@ -2,7 +2,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 const CustomerOrderDataRow = ({ order, refetch }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const {
     _id,
@@ -32,7 +32,7 @@ const CustomerOrderDataRow = ({ order, refetch }) => {
       console.error(error);
     }
   };
-  console.log(order);
+  // console.log(order);
   // 💳 Pay Now
   const handlePayment = async () => {
     const paymentInfo = {

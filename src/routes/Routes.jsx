@@ -19,7 +19,11 @@ import Books from "../components/Home/Books";
 import Invoice from "../pages/Payment/Invoice";
 import MyBook from "../pages/MyBook";
 import EditBook from "../pages/EditBook";
+// import AllUser from "../pages/Dashboard/Admin/AllUser";
+import ManageBook from "../pages/Dashboard/Admin/ManageBook";
+// import UpdateRole from "../components/Modal/UpdateRole";
 import AllUser from "../pages/Dashboard/Admin/AllUser";
+import Wishlist from "../pages/Wishlist";
 
 export const router = createBrowserRouter([
   {
@@ -37,11 +41,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/book/:id",
-        element: <BookDetails></BookDetails>,
+        element: (
+          <PrivateRoute>
+            <BookDetails></BookDetails>
+          </PrivateRoute>
+        ),
       },
       {
         path: "/payment-success",
         element: <PaymentSuccess></PaymentSuccess>,
+      },
+      {
+        path: "/wishlist",
+        element: <Wishlist />,
       },
     ],
   },
@@ -122,6 +134,10 @@ export const router = createBrowserRouter([
       {
         path: "all-user",
         element: <AllUser />,
+      },
+      {
+        path: "manage-book",
+        element: <ManageBook />,
       },
     ],
   },

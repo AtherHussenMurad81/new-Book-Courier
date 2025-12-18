@@ -80,6 +80,10 @@ const Sidebar = () => {
               <UserMenu />
               <Librarian />
               <AdminMenu />
+
+              {/* {role === "user" && <UserMenu />}
+              {role === "librarian" && <Librarian />}
+              {role === "admin" && <AdminMenu />} */}
             </nav>
           </div>
 
