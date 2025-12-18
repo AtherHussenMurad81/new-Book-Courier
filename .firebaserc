@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "bookcourier-526c1",
+    "prod": "bookcourier-526c1"
+  },
+  "targets": {},
+  "etags": {}
+}
